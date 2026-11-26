@@ -1,0 +1,420 @@
+<title>QuantumShield Command Center</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="See every AI-agent and quantum-crypto risk in your business, priced in dollars and fixed in 90 days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: dark command-console. Hero = live radar instrument; then problem → feature → calculator → plan → pricing → CTA, single column of bands. */
+:root{
+  /* Monochrome glass: black ground, white type, frosted panels; one accent (teal) for action, gold only for money, red/orange only for severity */
+  --bg:#050505; --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07); --line:rgba(255,255,255,.11); --line2:rgba(255,255,255,.22);
+  --fg:#f5f5f7; --mut:#a1a1aa; --teal:#2dd4bf; --blue:#e4e4e7; --gold:#f5c451; --violet:#d4d4d8; --crit:#ff4d6d; --high:#ff8a3d;
+  --ink-on-accent:#050505;
+  --display:"Sora","Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,-apple-system,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);background-image:radial-gradient(900px 600px at 80% -10%,rgba(255,255,255,.07),transparent 60%),radial-gradient(700px 500px at -10% 30%,rgba(45,212,191,.06),transparent 60%);background-attachment:fixed;color:var(--fg);font:16px/1.6 var(--body);overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band{padding-block:88px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.08}
+h2{font-size:clamp(30px,4.4vw,48px);font-weight:800;letter-spacing:-.02em}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:var(--teal)}
+.lead{color:var(--mut);font-size:18px;max-width:62ch}
+.grad{background:linear-gradient(90deg,#fff,#a1a1aa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.goldgrad{background:linear-gradient(90deg,var(--gold),#fff1c7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:999px;font:700 16px var(--display);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-primary{background:#fff;color:var(--ink-on-accent);box-shadow:0 10px 40px rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.6)}
+.btn-primary:hover{transform:translateY(-2px);background:var(--teal);box-shadow:0 14px 50px rgba(45,212,191,.35)}
+.btn-ghost{border-color:var(--line2);color:var(--fg);background:rgba(255,255,255,.04);backdrop-filter:blur(10px)}
+.btn:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(5,5,5,.6);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--bg)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 17px var(--display);text-decoration:none}
+.logo i{width:26px;height:26px;border-radius:50%;border:2px solid #fff;position:relative;box-shadow:0 0 18px rgba(255,255,255,.25)}
+.logo i::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--teal)}
+nav .links{display:flex;gap:26px;font-size:14px;color:var(--mut)}
+nav .links a{text-decoration:none}nav .links a:hover{color:var(--fg)}
+nav .btn{padding:10px 18px;font-size:14px}
+@media(max-width:760px){nav .links{display:none}}
+
+/* hero */
+.hero{position:relative;padding-block:72px 64px;background:
+  radial-gradient(700px 420px at 75% 30%,rgba(255,255,255,.08),transparent 70%)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.03em}
+.hero .lead{margin:22px 0 30px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:14px}
+.proof{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:30px;font:500 13px var(--mono);color:var(--mut)}
+.proof span::before{content:"◆ ";color:var(--gold)}
+.console{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));backdrop-filter:blur(18px);border:1px solid var(--line2);border-radius:26px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15);min-width:0}
+.console-top{display:flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--mut);margin-bottom:10px}
+.console-top b{width:10px;height:10px;border-radius:50%;display:inline-block}
+#radar{width:100%;aspect-ratio:1/1;max-width:100%;display:block}
+.exposure{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+.exposure small{font:600 11px var(--mono);letter-spacing:.2em;color:var(--gold)}
+.exposure strong{font:800 clamp(26px,3.4vw,36px) var(--display);color:var(--gold);font-variant-numeric:tabular-nums;text-shadow:0 0 30px rgba(242,193,78,.35)}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}}
+
+#globe{width:100%;aspect-ratio:1/1;max-width:100%;position:relative}
+#globe canvas{display:block;width:100%!important;height:100%!important}
+.stage3d{transform-style:preserve-3d}
+.tilt{transition:transform .25s ease, box-shadow .25s ease;transform-style:preserve-3d;will-change:transform}
+.tilt:hover{box-shadow:0 30px 80px rgba(0,0,0,.45)}
+@keyframes rise{from{transform:translateY(18px)}to{transform:none}}
+.reveal{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+#radar{width:100%;max-width:520px;aspect-ratio:1/1;display:block;margin:0 auto}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;margin-top:36px}
+@media(max-width:900px){.feature-grid{grid-template-columns:1fr}}
+.countries{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.country{padding:20px;border-left:4px solid var(--c,var(--teal))}
+.country b{display:block;font:700 12px var(--mono);letter-spacing:.16em;color:var(--c,var(--teal))}
+.country span{display:block;margin-top:8px;font-size:15px}
+@media(max-width:900px){.countries{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.countries{grid-template-columns:1fr}}
+.offer{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#050505;font:700 13px var(--mono);letter-spacing:.14em;padding:9px 16px;border-radius:999px;box-shadow:0 0 30px rgba(245,196,81,.4);animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.price .per{font:500 15px var(--body);color:var(--mut)}
+.price .tot{font:600 13px var(--mono);color:var(--gold)}
+/* video */
+.video{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#000;max-width:380px;margin:0 auto}
+.video video{display:block;width:100%;height:auto}
+
+/* problem */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:22px;padding:28px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.card h3{font-size:22px;margin:10px 0 10px}
+.card p{color:var(--mut);margin:0}
+pre.code{margin:18px 0 0;background:rgba(0,0,0,.55);border:1px solid var(--line);border-radius:12px;padding:16px;font:500 13.5px/1.75 var(--mono);overflow-x:auto;color:var(--mut)}
+pre.code em{font-style:normal;color:var(--crit)}
+.tag{display:inline-block;font:700 11px var(--mono);letter-spacing:.18em;padding:6px 10px;border-radius:8px;border:1px solid currentColor}
+@media(max-width:760px){.split{grid-template-columns:1fr}}
+
+/* feature */
+.feature{background:linear-gradient(180deg,transparent,rgba(255,255,255,.03) 30%,transparent)}
+.rank{margin-top:36px;border:1px solid var(--line2);border-radius:22px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));backdrop-filter:blur(16px)}
+.rank-row{display:grid;grid-template-columns:40px 1.4fr 1fr auto;gap:14px;align-items:center;padding:16px 22px;border-top:1px solid var(--line)}
+.rank-row:first-child{border-top:0;background:rgba(255,255,255,.05);font:600 11px var(--mono);letter-spacing:.18em;color:var(--gold)}
+.rank-row .n{font:800 18px var(--display);color:var(--mut)}
+.rank-row .fix{font:500 13px var(--mono);color:var(--mut)}
+.rank-row .usd{font:700 18px var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.sev{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:10px}
+@media(max-width:640px){.rank-row{grid-template-columns:28px 1fr auto}.rank-row .fix{display:none}}
+.note{font-size:13px;color:var(--mut);margin-top:12px}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+.field{display:grid;gap:8px;margin-bottom:22px}
+.field label{display:flex;justify-content:space-between;gap:10px;font-weight:600}
+.field label output{font:700 15px var(--mono);color:var(--teal);font-variant-numeric:tabular-nums}
+.field small{color:var(--mut);font-size:13px}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.result{display:grid;gap:14px;align-content:start}
+.metric{background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.metric span{font:600 11px var(--mono);letter-spacing:.18em;color:var(--mut)}
+.metric strong{display:block;font:800 30px var(--display);font-variant-numeric:tabular-nums;margin-top:6px}
+.metric p{margin:6px 0 0;color:var(--mut);font-size:14px}
+.verdict{border-color:rgba(255,138,61,.5)}
+@media(max-width:760px){.calc{grid-template-columns:1fr}}
+
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.step .tag{margin-bottom:6px}
+@media(max-width:860px){.plan{grid-template-columns:1fr}}
+.clock{display:flex;flex-wrap:wrap;align-items:center;gap:20px 34px;margin-top:22px;padding:24px 28px;border:1px solid var(--line2);border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));backdrop-filter:blur(16px)}
+.clock strong{font:800 clamp(44px,7vw,72px)/1 var(--display);font-variant-numeric:tabular-nums;color:var(--fg);text-shadow:0 0 30px rgba(255,255,255,.25)}
+.clock p{margin:0;color:var(--mut);max-width:48ch}
+
+/* pricing */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px;align-items:stretch}
+.price{position:relative;display:flex;flex-direction:column;gap:18px}
+.price .amt{font:800 46px/1 var(--display);font-variant-numeric:tabular-nums}
+.price .was{font:600 20px var(--display);color:var(--mut);text-decoration:line-through;text-decoration-color:var(--crit);text-decoration-thickness:3px}
+.price ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.price li{display:flex;gap:10px;color:var(--fg);font-size:15px}
+.price li::before{content:"✓";color:var(--teal);font-weight:700}
+.price .btn{margin-top:auto;justify-content:center}
+.price.pop{border-color:rgba(255,255,255,.55);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 55%);box-shadow:0 0 70px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.3)}
+.price.pop li::before{color:#fff}
+.price.pro li::before{color:var(--violet)}
+.badge{position:absolute;top:-13px;left:28px;background:#fff;color:#050505;font:700 11px var(--mono);letter-spacing:.16em;padding:6px 12px;border-radius:999px}
+.who{font-size:14px;color:var(--mut);margin:0}
+@media(max-width:900px){.prices{grid-template-columns:1fr}}
+
+/* faq */
+details{border-top:1px solid var(--line);padding:18px 0}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font:600 18px var(--display);list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";color:var(--teal)}details[open] summary::after{content:"–"}
+details p{color:var(--mut);margin:10px 0 0;max-width:70ch}
+
+/* cta */
+.final{text-align:center;background:radial-gradient(600px 300px at 50% 0%,rgba(255,255,255,.1),transparent 70%)}
+.final h2{font-size:clamp(34px,5vw,58px)}
+.final .lead{margin:18px auto 30px}
+.copybox{display:inline-flex;align-items:center;gap:12px;margin-top:18px;font:500 14px var(--mono);color:var(--mut)}
+.copybox button{background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit}
+footer{padding-block:34px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<nav><div class="wrap">
+  <a class="logo" href="#top"><i></i>QuantumShield</a>
+  <div class="links"><a href="#feature">Radar</a><a href="#countries">Countries</a><a href="#calculator">Calculator</a><a href="#plan">90-day plan</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+  <a class="btn btn-primary" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Book a scan</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div>
+    <div class="eyebrow">QuantumShield Command Center</div>
+    <h1 class="reveal" style="margin-top:16px">See every AI and quantum risk in your business, <span class="goldgrad">priced in dollars.</span></h1>
+    <p class="lead">For businesses in the US, UK, Europe, Australia, Canada, Singapore and the Gulf. One scan maps your AI agents and every line of breakable cryptography. The Risk-to-Dollars Radar ranks each finding by money at stake, then we fix the top risks in 90 days.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#pricing">See pricing</a>
+      <a class="btn btn-ghost" href="#calculator">Estimate my exposure</a>
+    </div>
+    <div class="proof"><span>Built on open-source QuantumShield</span><span>NIST FIPS 203/204/205</span><span>NCSC · CNSA 2.0 timelines</span></div>
+  </div>
+  <div class="console stage3d" aria-label="3D globe showing QuantumShield coverage across countries">
+    <div class="console-top"><b style="background:var(--crit)"></b><b style="background:var(--gold)"></b><b style="background:var(--teal)"></b>&nbsp; live coverage · 8 regions</div>
+    <div id="globe"></div>
+    <div class="exposure"><small>SAMPLE EXPOSURE FOUND</small><strong id="total">$2,400,000</strong></div>
+  </div></div>
+</div></header>
+
+<section class="band" style="padding-top:24px"><div class="wrap">
+  <div class="video"><video src="QuantumShield_Command_Center.mp4" poster="poster.jpg" controls playsinline preload="metadata"></video></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="eyebrow" style="color:var(--crit)">The problem nobody sees</div>
+  <h2 style="margin-top:14px">Two hidden bills sit inside almost every business.</h2>
+  <div class="split">
+    <div class="card tilt">
+      <span class="tag" style="color:var(--violet)">AI AGENTS</span>
+      <h3>Agents hold keys they should never have</h3>
+      <p>Support bots, coding agents and workflow tools run with auto-approved actions, wildcard permissions and live API keys sitting in config files.</p>
+<pre class="code">"autoApprove": <em>true</em>,
+"permissions": <em>["*"]</em>,
+"command": "npx some-server<em>@latest</em>",
+"OPENAI_API_KEY": <em>"sk-live-…"</em></pre>
+    </div>
+    <div class="card tilt">
+      <span class="tag" style="color:var(--blue)">QUANTUM</span>
+      <h3>Your data is being copied now, to be read later</h3>
+      <p>Attackers can record encrypted traffic today and decrypt it once quantum computers break RSA and elliptic curves. Data that must stay private past 2030 is already exposed.</p>
+<pre class="code">payments-api/tls.go   <em>RSA-2048</em> key exchange
+auth/jwt.py           <em>RS256</em> signatures
+mobile/crypto.ts      <em>ECDSA P-256</em>
+infra/ssh_config      <em>ssh-rsa</em> host keys</pre>
+    </div>
+  </div>
+</div></section>
+
+<section class="band feature" id="feature"><div class="wrap">
+  <div class="eyebrow" style="color:var(--gold)">The feature no one else gives you</div>
+  <div class="feature-grid">
+    <div><h2 style="margin-top:14px">The Risk-to-Dollars Radar</h2>
+    <p class="lead" style="margin-top:16px">Scanners hand you 400 findings and no priorities. The Radar turns each one into a dollar figure your board understands, using your own record counts and breach-cost assumptions, then ranks fixes by dollars saved per hour of work.</p></div>
+    <canvas id="radar" width="900" height="900" aria-label="Animated radar with sample findings priced in dollars"></canvas>
+  </div>
+  <div class="rank" role="table" aria-label="Sample fix-first ranking">
+    <div class="rank-row" role="row"><span>#</span><span>FINDING</span><span class="fix">FIX</span><span style="text-align:right">AT STAKE</span></div>
+    <div class="rank-row" role="row"><span class="n">1</span><span><i class="sev" style="background:var(--crit)"></i>Live secret in AI agent config</span><span class="fix">rotate + move to vault</span><span class="usd" style="color:var(--crit)">$820,000</span></div>
+    <div class="rank-row" role="row"><span class="n">2</span><span><i class="sev" style="background:var(--high)"></i>RSA-2048 on payments API</span><span class="fix">hybrid ML-KEM TLS</span><span class="usd" style="color:var(--high)">$610,000</span></div>
+    <div class="rank-row" role="row"><span class="n">3</span><span><i class="sev" style="background:var(--crit)"></i>Support agent auto-approves tools</span><span class="fix">allow-list + approvals</span><span class="usd" style="color:var(--crit)">$430,000</span></div>
+    <div class="rank-row" role="row"><span class="n">4</span><span><i class="sev" style="background:var(--high)"></i>RS256 auth tokens</span><span class="fix">ML-DSA migration plan</span><span class="usd" style="color:var(--high)">$290,000</span></div>
+  </div>
+  <p class="note">Sample company shown. Your figures come from your data, and every estimate shows the inputs behind it.</p>
+</div></section>
+
+<section class="band" id="countries"><div class="wrap">
+  <div class="eyebrow" style="color:var(--gold)">Works in every country</div>
+  <h2 style="margin-top:14px">One radar. Every regulator.</h2>
+  <p class="lead" style="margin-top:16px">The post-quantum algorithms are global NIST standards, and AI-agent risks look the same everywhere. Each report maps findings to the guidance your regulator or customers follow.</p>
+  <div class="countries">
+    <div class="card country tilt" style="--c:var(--teal)"><b>UNITED STATES</b><span>NIST FIPS 203/204/205 · CNSA 2.0 for national security suppliers</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>UNITED KINGDOM</b><span>NCSC PQC timeline: plan by 2028, priority by 2031, all by 2035</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>EUROPEAN UNION</b><span>EU coordinated PQC roadmap · DORA · NIS2</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>AUSTRALIA</b><span>ASD Information Security Manual guidance</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>CANADA</b><span>Canadian Centre for Cyber Security PQC roadmap</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>SINGAPORE</b><span>MAS technology risk management expectations</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>SAUDI ARABIA · UAE</b><span>SAMA and national cyber frameworks</span></div>
+    <div class="card country tilt" style="--c:var(--teal)"><b>ANY COUNTRY</b><span>Remote delivery, any time zone, reports in English</span></div>
+  </div>
+</div></section>
+
+<section class="band" id="calculator"><div class="wrap">
+  <div class="eyebrow">Try it on your numbers</div>
+  <h2 style="margin-top:14px">Estimate your exposure in 30 seconds</h2>
+  <p class="lead" style="margin-top:16px">A simplified version of the Radar model. Move the sliders to match your business.</p>
+  <div class="calc">
+    <div class="card">
+      <div class="field"><label for="rec">Customer records you hold <output id="recO"></output></label><input id="rec" type="range" min="10000" max="5000000" step="10000" value="250000"><small>Accounts, patients, policies or transactions with personal data.</small></div>
+      <div class="field"><label for="cpr">Cost per exposed record <output id="cprO"></output></label><input id="cpr" type="range" min="20" max="500" step="5" value="150"><small>Your own estimate: notification, legal, churn, fines.</small></div>
+      <div class="field"><label for="cls">Data behind RSA / ECC <output id="clsO"></output></label><input id="cls" type="range" min="0" max="100" step="5" value="80"><small>Most systems today are close to 100%.</small></div>
+      <div class="field"><label for="ret">Years the data must stay secret <output id="retO"></output></label><input id="ret" type="range" min="1" max="25" step="1" value="7"><small>Health and clinical archives often run 10 to 25 years.</small></div>
+      <div class="field" style="margin-bottom:0"><label for="agt">AI agents with write access <output id="agtO"></output></label><input id="agt" type="range" min="0" max="50" step="1" value="6"><small>Bots or agents that can change records, send email or move data.</small></div>
+    </div>
+    <div class="result" aria-live="polite">
+      <div class="metric"><span>DATA AT RISK FROM QUANTUM</span><strong id="q" class="goldgrad">$0</strong><p>records × cost per record × share behind RSA/ECC</p></div>
+      <div class="metric verdict"><span>HARVEST-NOW-DECRYPT-LATER</span><strong id="hn">–</strong><p id="hnp"></p></div>
+      <div class="metric"><span>AI AGENT BLAST RADIUS</span><strong id="ag" style="color:var(--violet)">$0</strong><p>each write-capable agent assumed to reach 10% of records</p></div>
+      <a class="btn btn-primary" href="#pricing" style="justify-self:start">Get the real number</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="plan"><div class="wrap">
+  <div class="eyebrow">Generated for you</div>
+  <h2 style="margin-top:14px">A clock, a plan and a board report</h2>
+  <div class="clock"><strong id="days">1,132</strong><p><b style="color:var(--fg)">days until RSA and ECC are deprecated.</b> NIST IR 8547 (initial public draft) proposes deprecating them in 2030 and disallowing them in 2035. The UK NCSC asks for a migration plan by 2028.</p></div>
+  <div class="plan">
+    <div class="card step tilt"><span class="tag" style="color:var(--violet)">DAYS 1–30</span><h3>Lock down AI agents</h3><p>Rotate exposed keys, remove wildcard permissions, pin MCP servers, add human approval to risky actions.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--blue)">DAYS 31–60</span><h3>Crypto inventory</h3><p>Evidence-backed list of every RSA, ECC and weak hash with file and line. Hybrid TLS on the systems that matter most.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">DAYS 61–90</span><h3>ML-KEM and ML-DSA rollout</h3><p>Move priority systems to NIST post-quantum algorithms and add CI guardrails so new classical crypto cannot slip back in.</p></div>
+  </div>
+</div></section>
+
+<section class="band" id="pricing"><div class="wrap">
+  <span class="offer">LAUNCH OFFER · 50% OFF</span>
+  <h2 style="margin-top:18px">Pick your shield</h2>
+  <p class="lead" style="margin-top:16px">Monthly plans with a 3-month minimum onboarding. Launch customers keep 50% off for their first 3 months.</p>
+  <div class="prices">
+    <div class="card price tilt">
+      <span class="tag" style="color:var(--teal);align-self:start">STARTER</span>
+      <div><div class="was">$1,000/mo</div><div class="amt">$500<span class="per"> /month</span></div><div class="tot">$1,500 for 3 months</div></div>
+      <p class="who">For startups shipping their first AI agent or API.</p>
+      <ul><li>1 repository or AI agent</li><li>Monthly AI-agent and crypto scan</li><li>Findings report (PDF) with fixes</li><li>Monthly review call</li><li>Email support</li></ul>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Start with Starter</a>
+    </div>
+    <div class="card price pop tilt">
+      <span class="badge">MOST POPULAR</span>
+      <span class="tag" style="color:var(--gold);align-self:start">GROWTH</span>
+      <div><div class="was">$5,000/mo</div><div class="amt">$2,500<span class="per"> /month</span></div><div class="tot">$7,500 for 3 months</div></div>
+      <p class="who">For growing teams with several products and agents.</p>
+      <ul><li>Up to 5 repositories + AI agents</li><li>Risk-to-Dollars Radar</li><li>Quantum Deadline Clock</li><li>90-day fix plan</li><li>Board-ready report</li><li>Continuous monitoring</li></ul>
+      <a class="btn btn-primary" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Choose Growth</a>
+    </div>
+    <div class="card price pro tilt">
+      <span class="tag" style="color:var(--violet);align-self:start">PRO</span>
+      <div><div class="was">$13,000/mo</div><div class="amt">$6,500<span class="per"> /month</span></div><div class="tot">$19,500 for 3 months</div></div>
+      <p class="who">For regulated or larger companies that want fixes done.</p>
+      <ul><li>Whole organisation, up to 25 repos</li><li>Everything in Growth</li><li>Hands-on fixes for the top risks</li><li>NIST · NCSC · CNSA 2.0 mapping</li><li>CI guardrails with QuantumShield</li><li>Monthly executive briefing</li></ul>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Talk about Pro</a>
+    </div>
+  </div>
+  <p class="note">Prices in USD. After the first 3 months, plans continue month to month and can be cancelled with 30 days' notice.</p>
+</div></section>
+
+<section class="band" id="faq" style="padding-top:20px"><div class="wrap" style="max-width:860px">
+  <h2 style="margin-bottom:24px">Questions</h2>
+  <details><summary>Do you need access to our production systems?</summary><p>No. The scan reads source code and configuration. You can run the open-source scanner yourself and share only the report, or give read-only access to selected repositories.</p></details>
+  <details><summary>How are the dollar figures calculated?</summary><p>From inputs you confirm: how many records each system holds, your cost per exposed record, how long the data must stay secret, and what each AI agent can reach. Every figure in the report shows its inputs, so your team can challenge or change them.</p></details>
+  <details><summary>Is a clean scan proof that we are quantum-safe?</summary><p>No. Pattern-based scanning finds most direct uses of RSA, ECC and weak hashes, but it can miss crypto inside binaries, vendor products or runtime config. The plan covers those through supplier questions and manual review.</p></details>
+  <details><summary>Which industries is this for?</summary><p>Any business that uses AI agents or stores data that must stay private for years: fintech, healthcare, insurance, SaaS, legal and public-sector suppliers.</p></details>
+  <details><summary>How do payments work?</summary><p>Plans are billed monthly in advance, with a 3-month minimum. The launch offer gives 50% off for those first 3 months. After that, you continue month to month or stop with 30 days' notice.</p></details>
+</div></section>
+
+<section class="band final"><div class="wrap">
+  <h2>See your risk in dollars <span class="goldgrad">before an attacker does.</span></h2>
+  <p class="lead">Message <b style="color:var(--fg)">RADAR</b> on LinkedIn and get a free 20-minute scoping call.</p>
+  <a class="btn btn-primary" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Message RADAR on LinkedIn</a>
+  <div><span class="copybox">linkedin.com/in/komarapu-jordan-ephraim-229a46329 <button id="copy" type="button">Copy</button></span></div>
+</div></section>
+
+<footer><div class="wrap"><span>© 2026 Komarapu Jordan Ephraim · AI Security &amp; Post-Quantum Cryptography</span><span>Open source: QuantumShield · AgentCrypt Scan · PQC Radar</span></div></footer>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const usd=v=>'$'+Math.round(v).toLocaleString('en-US');
+// countdown to 1 Jan 2030
+const d=Math.max(0,Math.ceil((Date.UTC(2030,0,1)-Date.now())/864e5));$('days').textContent=d.toLocaleString('en-US');
+// calculator
+const ids=['rec','cpr','cls','ret','agt'];
+function calc(){
+  const rec=+$('rec').value,cpr=+$('cpr').value,cls=+$('cls').value/100,ret=+$('ret').value,agt=+$('agt').value;
+  $('recO').textContent=rec.toLocaleString('en-US');$('cprO').textContent=usd(cpr);$('clsO').textContent=Math.round(cls*100)+'%';$('retO').textContent=ret+' yrs';$('agtO').textContent=agt;
+  $('q').textContent=usd(rec*cpr*cls);
+  const until=new Date().getUTCFullYear()+ret;
+  if(until>=2030){$('hn').textContent='Exposed';$('hn').style.color='var(--high)';$('hnp').textContent='Your data must stay secret until '+until+', past the 2030 deprecation date.';}
+  else{$('hn').textContent='Lower risk';$('hn').style.color='var(--teal)';$('hnp').textContent='Your data expires in '+until+', before the 2030 deprecation date.';}
+  $('ag').textContent=usd(Math.min(rec,agt*rec*0.10)*cpr);
+}
+ids.forEach(i=>$(i).addEventListener('input',calc));calc();
+$('copy').addEventListener('click',()=>{const t='https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/';
+  navigator.clipboard.writeText(t).then(()=>{$('copy').textContent='Copied';},()=>{const r=document.createRange();r.selectNodeContents($('copy').parentNode.firstChild);const s=getSelection();s.removeAllRanges();s.addRange(r);});});
+// radar
+const c=$('radar'),x=c.getContext('2d'),W=900,cx=450,cy=450,R=360;
+const C={crit:'#ff4d6d',high:'#ff8a3d',gold:'#f2c14e',teal:'#2dd4bf'};
+const B=[{a:-2.3,d:.7,c:C.crit,v:820000},{a:-.6,d:.62,c:C.high,v:610000},{a:.5,d:.8,c:C.crit,v:430000},{a:1.4,d:.5,c:C.high,v:290000},{a:2.4,d:.75,c:C.gold,v:150000},{a:3.0,d:.42,c:C.high,v:100000}];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rr(X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+function draw(t){
+  x.clearRect(0,0,W,W);
+  const g=x.createRadialGradient(cx,cy,0,cx,cy,R);g.addColorStop(0,'rgba(242,193,78,.12)');g.addColorStop(1,'rgba(242,193,78,0)');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+  x.lineWidth=2;for(let i=1;i<=4;i++){x.strokeStyle=`rgba(45,212,191,${.1+.07*i})`;x.beginPath();x.arc(cx,cy,R*i/4,0,7);x.stroke();}
+  x.strokeStyle='rgba(91,141,239,.18)';for(let k=0;k<12;k++){const an=k*Math.PI/6;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(an)*R,cy+Math.sin(an)*R);x.stroke();}
+  x.strokeStyle='rgba(242,193,78,.5)';for(let m=0;m<72;m++){const an=m*Math.PI/36,l=m%6===0?20:8;x.beginPath();x.moveTo(cx+Math.cos(an)*(R+8),cy+Math.sin(an)*(R+8));x.lineTo(cx+Math.cos(an)*(R+8+l),cy+Math.sin(an)*(R+8+l));x.stroke();}
+  const sw=(t*1.5)%(Math.PI*2)-Math.PI;
+  for(let s=0;s<50;s++){const a0=sw-s*.02;x.fillStyle=`rgba(242,193,78,${.18*(1-s/50)})`;x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R,a0-.02,a0);x.closePath();x.fill();}
+  x.save();x.strokeStyle=C.gold;x.lineWidth=4;x.shadowColor=C.gold;x.shadowBlur=24;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(sw)*R,cy+Math.sin(sw)*R);x.stroke();x.restore();
+  B.forEach((b,i)=>{const bx=cx+Math.cos(b.a)*R*b.d,by=cy+Math.sin(b.a)*R*b.d,rad=12+b.v/50000;const ph=(t*1.1+i*.3)%1;
+    x.save();x.fillStyle=b.c;x.shadowColor=b.c;x.shadowBlur=30;x.beginPath();x.arc(bx,by,rad,0,7);x.fill();x.restore();
+    x.globalAlpha=1-ph;x.strokeStyle=b.c;x.lineWidth=2.5;x.beginPath();x.arc(bx,by,rad+ph*40,0,7);x.stroke();x.globalAlpha=1;
+    const lab=usd(b.v);x.font='700 28px "JetBrains Mono",monospace';const w=x.measureText(lab).width+28;const right=Math.cos(b.a)>-.1;const lx=right?bx+rad+14:bx-rad-14-w;
+    rr(lx,by-26,w,52,12);x.fillStyle='rgba(5,8,18,.92)';x.fill();x.strokeStyle=b.c;x.lineWidth=2;x.stroke();x.fillStyle=b.c;x.fillText(lab,lx+14,by+10);});
+  x.save();x.fillStyle=C.gold;x.shadowColor=C.gold;x.shadowBlur=20;x.beginPath();x.arc(cx,cy,9,0,7);x.fill();x.restore();
+}
+function loop(n){draw((n-start)/1000);if(!reduce)requestAnimationFrame(loop);}
+let start=performance.now();draw(0.6);if(!reduce)requestAnimationFrame(loop);
+})();
+// 3D globe
+(function(){const el=document.getElementById('globe');if(!window.THREE||!el)return;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(2,devicePixelRatio));el.appendChild(r.domElement);
+  const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,.1,100);cam.position.set(0,0,6.2);
+  const g=new THREE.Group();sc.add(g);g.rotation.x=.38;
+  const R=1.8;
+  g.add(new THREE.Mesh(new THREE.SphereGeometry(R*.985,64,64),new THREE.MeshBasicMaterial({color:0x0b0b0e,transparent:true,opacity:.95})));
+  const halo=new THREE.Mesh(new THREE.SphereGeometry(R*1.12,64,64),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.05,side:THREE.BackSide}));sc.add(halo);
+  const pts=[];const N=2600;for(let i=0;i<N;i++){const y=1-2*(i+.5)/N,rad=Math.sqrt(1-y*y),th=Math.PI*(3-Math.sqrt(5))*i;pts.push(Math.cos(th)*rad*R,y*R,Math.sin(th)*rad*R);}
+  const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));
+  g.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xd4d4d8,size:.02,transparent:true,opacity:.6})));
+  const ll=(la,lo,h=1)=>{const p=(90-la)*Math.PI/180,t=(lo+180)*Math.PI/180;return new THREE.Vector3(-R*h*Math.sin(p)*Math.cos(t),R*h*Math.cos(p),R*h*Math.sin(p)*Math.sin(t));};
+  const C=[[38,-97,0x2dd4bf],[54,-2,0xffffff],[50,10,0x2dd4bf],[-25,134,0xffffff],[56,-106,0x2dd4bf],[1.3,103.8,0xffffff],[24,45,0x2dd4bf]];
+  const hub=ll(17,78);const hm=new THREE.Mesh(new THREE.SphereGeometry(.06,16,16),new THREE.MeshBasicMaterial({color:0xf2c14e}));hm.position.copy(hub);g.add(hm);
+  const arcs=[];
+  C.forEach(([la,lo,col],i)=>{const p=ll(la,lo);const m=new THREE.Mesh(new THREE.SphereGeometry(.045,16,16),new THREE.MeshBasicMaterial({color:col}));m.position.copy(p);g.add(m);
+    const ring=new THREE.Mesh(new THREE.RingGeometry(.06,.08,32),new THREE.MeshBasicMaterial({color:col,transparent:true,side:THREE.DoubleSide}));ring.position.copy(ll(la,lo,1.005));ring.lookAt(0,0,0);g.add(ring);
+    const mid=hub.clone().add(p).multiplyScalar(.5);mid.setLength(R*(1.25+hub.distanceTo(p)*.12));
+    const curve=new THREE.QuadraticBezierCurve3(hub,mid,p);const cp=curve.getPoints(80);
+    const geo=new THREE.BufferGeometry().setFromPoints(cp);const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.85}));g.add(line);
+    const dot=new THREE.Mesh(new THREE.SphereGeometry(.03,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));g.add(dot);
+    arcs.push({curve,line,dot,ring,off:i*.14});});
+  const orbit=new THREE.Mesh(new THREE.TorusGeometry(R*1.35,.006,8,200),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.35}));orbit.rotation.x=1.2;orbit.rotation.y=.3;sc.add(orbit);
+  const sat=new THREE.Mesh(new THREE.SphereGeometry(.05,16,16),new THREE.MeshBasicMaterial({color:0xf2c14e}));sc.add(sat);
+  let mx=0,my=0;el.addEventListener('pointermove',e=>{const b=el.getBoundingClientRect();mx=(e.clientX-b.left)/b.width-.5;my=(e.clientY-b.top)/b.height-.5;});
+  el.addEventListener('pointerleave',()=>{mx=0;my=0;});
+  function size(){const w=el.clientWidth;r.setSize(w,w,false);cam.aspect=1;cam.updateProjectionMatrix();}size();addEventListener('resize',size);
+  const t0=performance.now();g.rotation.y=-1.2;
+  function frame(n){const t=(n-t0)/1000;g.rotation.y=-1.2+t*.18+mx*.6;g.rotation.x=.38+my*.4;
+    arcs.forEach(a=>{const k=((t*.35+a.off)%1);a.dot.position.copy(a.curve.getPoint(k));const s=1+((t+a.off*5)%1)*1.6;a.ring.scale.set(s,s,s);a.ring.material.opacity=1-((t+a.off*5)%1);});
+    const o=t*.6;const v=new THREE.Vector3(Math.cos(o)*R*1.35,Math.sin(o)*R*1.35,0).applyEuler(orbit.rotation);sat.position.copy(v);
+    r.render(sc,cam);if(!reduce)requestAnimationFrame(frame);}
+  frame(t0+400);if(!reduce)requestAnimationFrame(frame);
+})();
+// 3D tilt cards
+(function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches||!matchMedia('(hover: hover)').matches)return;
+  document.querySelectorAll('.tilt').forEach(c=>{c.addEventListener('pointermove',e=>{const b=c.getBoundingClientRect();const px=(e.clientX-b.left)/b.width-.5,py=(e.clientY-b.top)/b.height-.5;
+    c.style.transform=`perspective(900px) rotateY(${px*10}deg) rotateX(${-py*10}deg) translateZ(6px)`;});
+    c.addEventListener('pointerleave',()=>{c.style.transform='';});});})();
+
+</script>
