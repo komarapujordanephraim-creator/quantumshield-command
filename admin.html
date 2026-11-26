@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuantumShield Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--bg:#050505;--glass:rgba(255,255,255,.055);--glass2:rgba(255,255,255,.09);--line:rgba(255,255,255,.11);--line2:rgba(255,255,255,.22);--fg:#f5f5f7;--mut:#a1a1aa;--teal:#2dd4bf;--gold:#f5c451;--crit:#ff4d6d;--high:#ff8a3d;
+--d:"Sora",system-ui,sans-serif;--b:"Inter",system-ui,sans-serif;--m:"JetBrains Mono",ui-monospace,monospace;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);background-image:radial-gradient(900px 600px at 10% -10%,rgba(255,255,255,.07),transparent 60%),radial-gradient(700px 500px at 110% 40%,rgba(245,196,81,.06),transparent 60%);background-attachment:fixed;color:var(--fg);font:15px/1.55 var(--b)}
+a{color:inherit}button,input,select{font:inherit;color:inherit}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+aside{border-right:1px solid var(--line);padding:22px 16px;background:rgba(255,255,255,.02);position:sticky;top:0;height:100vh}
+@media(max-width:860px){aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}}
+.logo{display:flex;align-items:center;gap:10px;font:800 16px var(--d);text-decoration:none}
+.logo i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;position:relative}.logo i::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--gold)}
+.side{display:flex;flex-direction:column;gap:4px;margin-top:26px}
+@media(max-width:860px){.side{flex-direction:row;flex-wrap:wrap}}
+.side button{text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:10px;cursor:pointer;color:var(--mut);font-weight:600}
+.side button[aria-current=true]{background:#fff;color:#050505}
+.side button:hover:not([aria-current=true]){background:var(--glass)}
+main{padding:26px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));min-width:0}
+h1,h2,h3{font-family:var(--d);margin:0;line-height:1.15}
+.eyebrow{font:600 11px var(--m);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.pad{padding:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--glass);border-radius:999px;padding:9px 16px;cursor:pointer;text-decoration:none;font-weight:600;font-size:14px}
+.btn:hover{background:var(--glass2)}.btn.primary{background:#fff;color:#050505;border-color:#fff}.btn.danger{border-color:rgba(255,77,109,.6);color:var(--crit)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,.side button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}@media(max-width:560px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{padding:16px}.kpi span{font:600 10.5px var(--m);letter-spacing:.16em;color:var(--mut)}.kpi strong{display:block;font:800 26px var(--d);margin-top:4px;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-top:16px}@media(max-width:1000px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font:600 10.5px var(--m);letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
+td.num{text-align:right;font:700 13.5px var(--m);font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+.pill{display:inline-block;font:700 10px var(--m);letter-spacing:.1em;padding:3px 8px;border-radius:999px;border:1px solid var(--line2);color:var(--mut);text-transform:uppercase}
+.pill.ex{color:var(--gold);border-color:rgba(245,196,81,.5)}
+.log{font:12px var(--m);color:var(--mut);max-height:360px;overflow:auto}.log div{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+label{display:block;font-weight:600;font-size:13px;margin:14px 0 6px}
+input[type=number],select{width:100%;background:rgba(0,0,0,.45);border:1px solid var(--line2);border-radius:12px;padding:10px 12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.agentrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.agentrow p{margin:2px 0 0;color:var(--mut);font-size:13px}
+.switch{position:relative;width:42px;height:24px;flex:none}.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.15);transition:.2s;cursor:pointer}
+.switch span::after{content:"";position:absolute;width:18px;height:18px;top:3px;left:3px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked+span{background:var(--teal)}.switch input:checked+span::after{left:21px}
+.note{font-size:12.5px;color:var(--mut)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:160px;margin-top:14px}
+.bars div{flex:1;background:linear-gradient(180deg,var(--gold),rgba(245,196,81,.25));border-radius:8px 8px 2px 2px;position:relative;min-height:4px}
+.bars div span{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font:700 11px var(--m);color:var(--fg);white-space:nowrap}
+.bars div em{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font:600 10px var(--m);color:var(--mut);font-style:normal;white-space:nowrap}
+.live{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--m);color:var(--teal)}.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal);animation:p 1.6s infinite}@keyframes p{50%{opacity:.3}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#fff;color:#050505;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;z-index:50}
+.confirm{display:none;gap:8px;align-items:center;margin-top:10px}.confirm.show{display:flex}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head>
+<body><div class="layout">
+<aside>
+  <a class="logo" href="index.html"><i></i>QuantumShield</a>
+  <div class="note" style="margin-top:6px">Admin panel</div>
+  <nav class="side" aria-label="Admin sections">
+    <button data-v="overview" aria-current="true">Overview</button>
+    <button data-v="clients">Clients</button>
+    <button data-v="agents">Agents</button>
+    <button data-v="pricing">Pricing &amp; offer</button>
+    <button data-v="activity">Activity</button>
+    <button data-v="data">Data</button>
+  </nav>
+  <div style="margin-top:22px;display:flex;flex-direction:column;gap:8px"><a class="btn" href="app.html">Open client portal</a><a class="btn" href="index.html">Website</a></div>
+</aside>
+<main>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div><div class="eyebrow">Admin</div><h1 id="vTitle" style="font-size:clamp(24px,3vw,34px);margin-top:6px">Overview</h1></div>
+    <span class="live">Connected to client portal</span>
+  </div>
+  <div id="view"></div>
+</main>
+</div>
+<script src="scanner.js"></script>
+<script src="store.js"></script>
+<script>
+(function(){
+const Q=window.QS;const $=id=>document.getElementById(id);let view='overview';
+const toast=m=>{const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);};
+document.querySelectorAll('.side button').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.v;document.querySelectorAll('.side button').forEach(x=>x.setAttribute('aria-current',x===b));render();}));
+const mrr=d=>d.clients.filter(c=>!c.example).reduce((a,c)=>a+Q.monthly(c.plan,d.settings),0);
+const mrrAll=d=>d.clients.reduce((a,c)=>a+Q.monthly(c.plan,d.settings),0);
+function render(){const d=Q.get();const V=$('view');const T={overview:'Overview',clients:'Clients',agents:'Agents',pricing:'Pricing & offer',activity:'Activity',data:'Data'};$('vTitle').textContent=T[view];
+  if(view==='overview'){const scans=d.clients.reduce((a,c)=>a+(c.scans||[]).length,0);const exp=d.clients.reduce((a,c)=>a+((c.scans||[])[0]?c.scans[0].total:0),0);const pipe=d.clients.reduce((a,c)=>a+Q.monthly(c.plan,d.settings)*d.settings.minMonths,0);
+    const byPlan={starter:0,growth:0,pro:0};d.clients.forEach(c=>byPlan[c.plan]=(byPlan[c.plan]||0)+1);const maxP=Math.max(1,...Object.values(byPlan));
+    V.innerHTML=`<div class="kpis"><div class="kpi glass"><span>CLIENTS</span><strong>${d.clients.length}</strong></div><div class="kpi glass"><span>SCANS RUN</span><strong>${scans}</strong></div>
+    <div class="kpi glass"><span>EXPOSURE FOUND</span><strong style="color:var(--gold)">${Q.money(exp)}</strong></div><div class="kpi glass"><span>MONTHLY REVENUE</span><strong>${Q.money(mrrAll(d))}</strong></div>
+    <div class="kpi glass"><span>3-MONTH PIPELINE</span><strong>${Q.money(pipe)}</strong></div></div>
+    ${d.clients.some(c=>c.example)?'<p class="note" style="margin-top:10px">Includes example clients (marked). Real clients only: '+Q.money(mrr(d))+'/month.</p>':''}
+    <div class="two"><div class="glass pad"><h3 style="font-size:16px">Recent clients</h3>${clientTable(d,5)}</div>
+    <div class="glass pad"><h3 style="font-size:16px">Clients by plan</h3><div class="bars" style="margin-bottom:26px">${Object.entries(byPlan).map(([k,v])=>`<div style="height:${8+92*v/maxP}%"><span>${v}</span><em>${Q.PLANS[k].name}</em></div>`).join('')}</div>
+    <h3 style="font-size:16px;margin-top:10px">Live activity</h3><div class="log">${logRows(d,8)}</div></div></div>`;bindRows();}
+  if(view==='clients'){V.innerHTML=`<div class="glass pad" style="margin-top:18px">${clientTable(d,999)}</div><div id="detail"></div>`;bindRows();}
+  if(view==='agents'){V.innerHTML=`<div class="glass pad" style="margin-top:18px;max-width:820px"><p class="note">Turning an agent off here turns it off in every client's portal immediately.</p>${Q.AGENTS.map(a=>`<div class="agentrow"><div><b>${a.name}</b><p>${a.role}</p></div><label class="switch"><input type="checkbox" data-a="${a.id}" ${d.settings.agentsEnabled[a.id]?'checked':''} aria-label="${a.name}"><span></span></label></div>`).join('')}
+    <h3 style="font-size:16px;margin-top:22px">Risk-to-Dollars model</h3><p class="note">Share of total record value counted per finding, before diminishing repeats.</p>
+    <div class="row">${['critical','high','medium','low'].map(k=>`<div><label for="s_${k}">${k[0].toUpperCase()+k.slice(1)} (%)</label><input id="s_${k}" type="number" step="any" min="0" max="50" value="${+(d.settings.sevShare[k]*100).toFixed(2)}"></div>`).join('')}</div>
+    <button class="btn primary" id="saveModel" style="margin-top:14px">Save model</button></div>`;
+    V.querySelectorAll('input[data-a]').forEach(i=>i.addEventListener('change',e=>{const dd=Q.get();dd.settings.agentsEnabled[e.target.dataset.a]=e.target.checked;Q.save(dd);Q.log(`Admin ${e.target.checked?'enabled':'disabled'} ${e.target.getAttribute('aria-label')} for all clients`);toast('Saved and synced');}));
+    $('saveModel').onclick=()=>{const dd=Q.get();['critical','high','medium','low'].forEach(k=>dd.settings.sevShare[k]=Math.max(0,+$('s_'+k).value||0)/100);Q.save(dd);Q.log('Admin updated the Risk-to-Dollars model');toast('Model saved');};}
+  if(view==='pricing'){const s=d.settings;V.innerHTML=`<div class="glass pad" style="margin-top:18px;max-width:820px"><div class="row"><div><label for="disc">Launch discount (%)</label><input id="disc" type="number" min="0" max="90" value="${s.discountPct}"></div><div><label for="minm">Minimum months</label><input id="minm" type="number" min="1" max="24" value="${s.minMonths}"></div></div>
+    <button class="btn primary" id="saveOffer" style="margin-top:14px">Save offer</button>
+    <div class="scroll" style="margin-top:18px"><table><thead><tr><th>Plan</th><th>List / month</th><th>Offer / month</th><th>Minimum term</th></tr></thead><tbody>${Object.entries(Q.PLANS).map(([k,p])=>`<tr><td>${p.name}</td><td class="num" style="text-align:left">${Q.money(p.list)}</td><td class="num" style="text-align:left;color:var(--gold)">${Q.money(Q.monthly(k,s))}</td><td class="num" style="text-align:left">${Q.money(Q.monthly(k,s)*s.minMonths)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="note">The client portal shows these prices as soon as you save.</p></div>`;
+    $('saveOffer').onclick=()=>{const dd=Q.get();dd.settings.discountPct=Math.min(90,Math.max(0,+$('disc').value||0));dd.settings.minMonths=Math.max(1,+$('minm').value||1);Q.save(dd);Q.log(`Admin set offer: ${dd.settings.discountPct}% off, ${dd.settings.minMonths}-month minimum`);toast('Offer saved and synced');render();};}
+  if(view==='activity'){V.innerHTML=`<div class="glass pad" style="margin-top:18px"><div class="log" style="max-height:none">${logRows(d,300)}</div></div>`;}
+  if(view==='data'){V.innerHTML=`<div class="glass pad" style="margin-top:18px;max-width:820px"><p>This demo keeps data in this browser, so the portal and admin panel stay connected on this device. A production deployment moves the same store to a database with sign-in.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" id="seed">Add example clients</button><button class="btn" id="exp">Export JSON</button><label class="btn" for="imp">Import JSON</label><input id="imp" type="file" accept="application/json" hidden><button class="btn danger" id="clr">Clear all data</button></div>
+    <div class="confirm" id="cf"><span>Delete all clients, scans and settings in this browser?</span><button class="btn danger" id="cfy">Delete</button><button class="btn" id="cfn">Cancel</button></div></div>`;
+    $('seed').onclick=seed;$('exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(Q.get(),null,2)],{type:'application/json'}));a.download='quantumshield-data.json';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),300);};
+    $('imp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.clients)throw 0;Q.save(Object.assign(Q.defaults(),j));toast('Imported');}catch(err){toast('That file is not a QuantumShield export');}};r.readAsText(f);};
+    $('clr').onclick=()=>$('cf').classList.add('show');$('cfn').onclick=()=>$('cf').classList.remove('show');$('cfy').onclick=()=>{Q.save(Q.defaults());toast('All data cleared');};}
+}
+function clientTable(d,n){if(!d.clients.length)return '<p class="note">No clients yet. Add one in the client portal, or add example clients from Data.</p>';
+  return `<div class="scroll"><table><thead><tr><th>Client</th><th>Country</th><th>Plan</th><th>Last scan</th><th style="text-align:right">Score</th><th style="text-align:right">Exposure</th></tr></thead><tbody>${d.clients.slice(0,n).map(c=>{const s=(c.scans||[])[0];return `<tr data-c="${c.id}" style="cursor:pointer"><td><b>${Q.esc(c.name)}</b> ${c.example?'<span class="pill ex">example</span>':''}<div class="note">${Q.esc(c.industry)}</div></td><td>${Q.esc(Q.COUNTRIES[c.country].name)}</td><td><span class="pill">${Q.PLANS[c.plan].name}</span> <span class="note">${Q.money(Q.monthly(c.plan,d.settings))}/mo</span></td><td class="note">${s?new Date(s.at).toLocaleDateString():'Not scanned'}</td><td class="num">${s?s.score:'–'}</td><td class="num" style="color:var(--gold)">${s?Q.money(s.total):'–'}</td></tr>`;}).join('')}</tbody></table></div>`;}
+function bindRows(){document.querySelectorAll('tr[data-c]').forEach(r=>r.addEventListener('click',()=>{if(view!=='clients'){view='clients';document.querySelectorAll('.side button').forEach(x=>x.setAttribute('aria-current',x.dataset.v==='clients'));render();}showDetail(r.dataset.c);}));}
+function showDetail(id){const d=Q.get();const c=d.clients.find(x=>x.id===id);const box=$('detail');if(!c||!box)return;const s=c.scans||[];
+  box.innerHTML=`<div class="glass pad" style="margin-top:16px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3 style="font-size:18px">${Q.esc(c.name)}</h3>
+  <div style="display:flex;gap:8px;align-items:center"><label for="pl" class="note" style="margin:0">Plan</label><select id="pl" style="width:150px">${Object.entries(Q.PLANS).map(([k,p])=>`<option value="${k}" ${k===c.plan?'selected':''}>${p.name}</option>`).join('')}</select></div></div>
+  <p class="note">${Q.esc(c.industry)} · ${Q.esc(Q.COUNTRIES[c.country].name)} · ${Number(c.records).toLocaleString('en-US')} records · $${c.costPerRecord}/record · secret for ${c.retention} yrs · AI agents: ${c.usesAgents?'yes':'no'}</p>
+  <div class="scroll"><table><thead><tr><th>Scan</th><th style="text-align:right">Files</th><th style="text-align:right">Findings</th><th style="text-align:right">Critical</th><th style="text-align:right">Score</th><th style="text-align:right">Exposure</th></tr></thead><tbody>${s.map(x=>`<tr><td>${new Date(x.at).toLocaleString()}</td><td class="num">${x.files}</td><td class="num">${x.count}</td><td class="num">${x.critical}</td><td class="num">${x.score}</td><td class="num" style="color:var(--gold)">${Q.money(x.total)}</td></tr>`).join('')||'<tr><td colspan="6" class="note">No scans yet</td></tr>'}</tbody></table></div></div>`;
+  $('pl').onchange=e=>{const dd=Q.get();const cc=dd.clients.find(x=>x.id===id);cc.plan=e.target.value;Q.save(dd);Q.log(`Admin moved ${cc.name} to ${Q.PLANS[cc.plan].name}`,cc.id);toast('Plan updated');};}
+function logRows(d,n){return d.log.slice(0,n).map(l=>{const c=l.client&&d.clients.find(x=>x.id===l.client);return `<div>${new Date(l.t).toLocaleString()} · ${c?'<b style="color:var(--fg)">'+Q.esc(c.name)+'</b> · ':''}${Q.esc(l.msg)}</div>`;}).join('')||'<div>No activity yet.</div>';}
+function seed(){const d=Q.get();const now=Date.now();const ex=[
+  {name:'Northbridge Payments',country:'UK',industry:'Fintech',records:1200000,costPerRecord:180,retention:10,plan:'pro',usesAgents:true,score:38,total:2950000,count:61,critical:4},
+  {name:'Clearwater Health',country:'US',industry:'Healthcare',records:640000,costPerRecord:240,retention:25,plan:'growth',usesAgents:true,score:44,total:1880000,count:47,critical:3},
+  {name:'Lumen Legal',country:'EU',industry:'Legal',records:90000,costPerRecord:150,retention:12,plan:'starter',usesAgents:false,score:63,total:210000,count:18,critical:1},
+  {name:'Harbour Insure',country:'AU',industry:'Insurance',records:410000,costPerRecord:160,retention:15,plan:'growth',usesAgents:true,score:51,total:960000,count:33,critical:2}];
+  ex.forEach((e,i)=>{if(d.clients.some(c=>c.name===e.name))return;d.clients.push({id:Q.uid(),example:true,created:now-i*864e5,name:e.name,country:e.country,industry:e.industry,records:e.records,costPerRecord:e.costPerRecord,retention:e.retention,plan:e.plan,usesAgents:e.usesAgents,agentOverrides:{},
+    scans:[{at:now-i*36e5*7,total:e.total,score:e.score,count:e.count,critical:e.critical,files:12+i*7}]});});
+  Q.save(d);Q.log('Example clients added (not real customers)');toast('Example clients added');render();}
+Q.on(()=>render());render();
+})();
+</script>
+</body></html>

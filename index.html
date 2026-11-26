@@ -130,7 +130,7 @@ input[type=range]{width:100%;accent-color:var(--teal)}
 /* plan */
 .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
 .step .tag{margin-bottom:6px}
-@media(max-width:860px){.plan{grid-template-columns:1fr}}
+@media(max-width:860px){.plan{grid-template-columns:1fr!important}}
 .clock{display:flex;flex-wrap:wrap;align-items:center;gap:20px 34px;margin-top:22px;padding:24px 28px;border:1px solid var(--line2);border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));backdrop-filter:blur(16px)}
 .clock strong{font:800 clamp(44px,7vw,72px)/1 var(--display);font-variant-numeric:tabular-nums;color:var(--fg);text-shadow:0 0 30px rgba(255,255,255,.25)}
 .clock p{margin:0;color:var(--mut);max-width:48ch}
@@ -172,7 +172,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 <canvas id="bg3d" aria-hidden="true"></canvas>
 <nav><div class="wrap">
   <a class="logo" href="#top"><i></i>QuantumShield</a>
-  <div class="links"><a href="#feature">Radar</a><a href="#countries">Countries</a><a href="#calculator">Calculator</a><a href="#plan">90-day plan</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+  <div class="links"><a href="#feature">Radar</a><a href="#countries">Countries</a><a href="#calculator">Calculator</a><a href="#plan">90-day plan</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="app.html">Client portal</a><a href="admin.html">Admin</a></div>
   <a class="btn btn-primary" href="https://www.linkedin.com/in/komarapu-jordan-ephraim-229a46329/" target="_blank" rel="noopener">Book a scan</a>
 </div></nav>
 
@@ -286,6 +286,21 @@ infra/ssh_config      <em>ssh-rsa</em> host keys</pre>
     <div class="card step tilt"><span class="tag" style="color:var(--blue)">DAYS 31–60</span><h3>Crypto inventory</h3><p>Evidence-backed list of every RSA, ECC and weak hash with file and line. Hybrid TLS on the systems that matter most.</p></div>
     <div class="card step tilt"><span class="tag" style="color:var(--teal)">DAYS 61–90</span><h3>ML-KEM and ML-DSA rollout</h3><p>Move priority systems to NIST post-quantum algorithms and add CI guardrails so new classical crypto cannot slip back in.</p></div>
   </div>
+</div></section>
+
+<section class="band" id="platform"><div class="wrap">
+  <div class="eyebrow">The platform</div>
+  <h2 style="margin-top:14px">Six AI agents. One admin panel. All connected.</h2>
+  <p class="lead" style="margin-top:16px">Each client gets agents switched on from their own answers: country, industry, data volume and whether they run AI agents. The admin panel controls every agent, the pricing model and the offer, and sees every scan live.</p>
+  <div class="plan" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">DISCOVERY</span><h3>Discovery Agent</h3><p>Scans code, configs and dependency files for RSA, ECC, weak hashes and committed keys.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">GUARD</span><h3>Agent Guard</h3><p>Finds auto-approved tools, wildcard permissions, secrets and unpinned MCP servers.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--gold)">DOLLARS</span><h3>Risk-to-Dollars Agent</h3><p>Prices every finding from the client's records, cost per record and retention.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">COMPLIANCE</span><h3>Compliance Agent</h3><p>Maps findings to NIST, NCSC, EU, ASD, CCCS, MAS or SAMA guidance by country.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">PLANNER</span><h3>Fix-Plan Agent</h3><p>Builds the 90-day plan, ranked by dollars saved per hour of work.</p></div>
+    <div class="card step tilt"><span class="tag" style="color:var(--teal)">REPORTER</span><h3>Report Agent</h3><p>Writes the board summary and exports JSON and SARIF for your tools.</p></div>
+  </div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px"><a class="btn btn-primary" href="app.html">Try the client portal</a><a class="btn btn-ghost" href="admin.html">Open the admin panel</a></div>
 </div></section>
 
 <section class="band" id="pricing"><div class="wrap">
