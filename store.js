@@ -19,9 +19,9 @@
   };
 
   var PLANS = {
-    starter: { name: "Starter", list: 1000, repos: 1 },
-    growth: { name: "Growth", list: 5000, repos: 5 },
-    pro: { name: "Pro", list: 13000, repos: 25 }
+    starter: { name: "Starter", list: 200, repos: 1 },
+    growth: { name: "Growth", list: 1000, repos: 5 },
+    pro: { name: "Pro", list: 4000, repos: 25 }
   };
 
   var AGENTS = [
