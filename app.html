@@ -165,7 +165,7 @@ function fillClients(){const d=Q.get();const s=$('clientSel');s.innerHTML='';
   if(!activeId||!client())activeId=d.clients[0].id;s.value=activeId;}
 function fillForm(){const c=client();if(!c)return;$('cName').value=c.name;$('cCountry').value=c.country;$('cIndustry').value=c.industry;$('cRecords').value=c.records;$('cCost').value=c.costPerRecord;$('cRet').value=c.retention;$('cPlan').value=c.plan;$('cAgents').checked=!!c.usesAgents;}
 function priceNote(){const s=Q.get().settings;const p=$('cPlan').value;const m=Q.monthly(p,s);
-  $('priceNote').innerHTML=`${Q.PLANS[p].name}: <b style="color:var(--fg)">${Q.money(m)}/month</b>${s.discountPct?` (launch ${s.discountPct}% off ${Q.money(Q.PLANS[p].list)})`:''} · ${s.minMonths}-month minimum = ${Q.money(m*s.minMonths)}`;}
+  $('priceNote').innerHTML=`${Q.PLANS[p].name}: <b style="color:var(--fg)">${Q.money(m)}/month</b>${s.discountPct?` for the first ${s.minMonths} months (${s.discountPct}% off); then ${Q.money(Q.PLANS[p].list)}/month`:''} · ${s.minMonths}-month minimum = ${Q.money(m*s.minMonths)}`;}
 ['cPlan'].forEach(i=>$(i).addEventListener('change',priceNote));
 
 function readForm(){return{name:$('cName').value.trim(),country:$('cCountry').value,industry:$('cIndustry').value,records:Math.max(0,+$('cRecords').value||0),costPerRecord:Math.max(1,+$('cCost').value||1),retention:Math.max(1,+$('cRet').value||1),plan:$('cPlan').value,usesAgents:$('cAgents').checked};}
